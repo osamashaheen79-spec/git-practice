@@ -1,0 +1,260 @@
+# Git Tutorial — From Zero to GitHub
+### By Osama | April 2026
+
+---
+
+## What is Git?
+
+Git is a **version control system** that runs on your computer. It tracks changes to your files over time, allowing you to:
+- Save snapshots of your work (commits)
+- Go back to any previous version
+- Work on new features without risking your main code (branches)
+- Collaborate with others (push/pull)
+
+### Git vs GitHub vs GitLab
+
+| Tool | What it is |
+|------|-----------|
+| **Git** | The tool on your PC — works offline |
+| **GitHub** | A website that hosts your Git repos online |
+| **GitLab** | Same as GitHub — used by universities and research institutes |
+
+> Think of Git as Microsoft Word and GitHub/GitLab as OneDrive — you work locally, then upload to the cloud.
+
+---
+
+## Setup
+
+### Step 1: Verify Git is installed
+```bash
+git --version
+# Expected output: git version 2.x.x
+```
+
+### Step 2: Set your identity
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+```
+
+### Step 3: Verify your identity
+```bash
+git config --list
+# Expected output:
+# user.name=Your Name
+# user.email=youremail@example.com
+```
+
+---
+
+## Core Local Workflow
+
+### Step 4: Create a new repository
+```bash
+mkdir my-first-repo
+cd my-first-repo
+git init
+# Expected output: Initialized empty Git repository in .../my-first-repo/.git/
+```
+
+### Step 5: Create a file
+```bash
+echo "Hello, Git!" > hello.txt
+```
+
+### Step 6: Check status
+```bash
+git status
+# Expected output:
+# Untracked files:
+#   hello.txt
+```
+
+> **Untracked** means Git can see the file but is NOT recording changes to it yet.
+
+### Step 7: Stage your files
+```bash
+git add .
+# The . means "stage everything in this folder"
+```
+
+```bash
+git status
+# Expected output:
+# Changes to be committed:
+#   new file: hello.txt
+```
+
+> **Staging** is like putting files in a box before sealing it. It gives you control over exactly what goes into each commit.
+
+### Step 8: Make your first commit
+```bash
+git commit -m "My first commit"
+# Expected output:
+# [master (root-commit) a131e70] My first commit
+# 1 file changed, 1 insertion(+)
+```
+
+> A **commit** is a permanent snapshot of your files at that moment. Always write a meaningful message!
+
+### Step 9: View your history
+```bash
+git log
+# Expected output:
+# commit a131e708... (HEAD -> master)
+# Author: Your Name <email>
+# Date: ...
+#     My first commit
+```
+
+### Step 10: Make a change and commit again
+1. Open `hello.txt` and edit it
+2. Save the file
+3. Run:
+```bash
+git status        # Shows "modified: hello.txt"
+git add .
+git commit -m "Updated hello.txt"
+git log           # Now shows 2 commits
+```
+
+### Step 11: Compare two commits
+```bash
+git diff <first-commit-id> <second-commit-id>
+```
+
+**Reading the diff output:**
+
+| Symbol | Color | Meaning |
+|--------|-------|---------|
+| `+` | Green | Line was **added** |
+| `-` | Red | Line was **deleted** |
+| (none) | White | Line **unchanged** |
+
+---
+
+## Branches
+
+A branch is a **parallel version** of your project. Use branches to experiment freely without affecting your main code.
+
+**Real example for your thesis:**
+- `master` — stable, working robot code
+- `new-algorithm` — experimenting with a new grinding path
+- `cv-testing` — testing OpenCV tool wear detection
+
+### Step 12: Create and switch branches
+```bash
+git branch                    # List all branches (* = current)
+git branch my-feature         # Create new branch
+git checkout my-feature       # Switch to it
+git branch                    # Verify (* is now on my-feature)
+```
+
+### Step 13: Work on your branch
+```bash
+echo "new feature" > feature.txt
+git add .
+git commit -m "added feature file"
+git log                       # Shows new commit on my-feature
+```
+
+### Step 14: Switch back to master
+```bash
+git checkout master
+ls                            # feature.txt is GONE — master is untouched!
+```
+
+> Git physically changes your folder contents when you switch branches! 🤯
+
+### Step 15: Merge your branch into master
+```bash
+git checkout master           # Make sure you're on master
+git merge my-feature          # Merge feature branch in
+ls                            # feature.txt is now on master too!
+```
+
+**Visual representation:**
+```
+master      ●──●──────────●   ← after merge
+                 \        /
+my-feature        ●──────     ← merged in
+```
+
+---
+
+## Connecting to GitHub / GitLab
+
+### Step 16: Connect local repo to GitHub
+```bash
+git remote add origin https://github.com/your-username/your-repo.git
+git remote -v                 # Verify connection
+```
+
+### Step 17: Push your code online (first time)
+```bash
+git push -u origin master
+# -u sets GitHub as default destination (only needed first time!)
+```
+
+### Step 18: Push future changes
+```bash
+git add .
+git commit -m "your message"
+git push                      # No need for -u origin master anymore!
+```
+
+### Step 19: Pull updates from online
+```bash
+git pull                      # Downloads and applies online changes locally
+```
+
+> **Note:** `git status` only checks local changes — it won't tell you about online changes. Always run `git pull` to get the latest!
+
+---
+
+## The Complete Daily Workflow
+
+```bash
+git pull                      # 1. Get latest updates from online
+# ... make your changes ...
+git status                    # 2. Check what changed
+git add .                     # 3. Stage your changes
+git commit -m "description"   # 4. Save snapshot
+git push                      # 5. Upload to online
+```
+
+---
+
+## Quick Reference — All Commands
+
+| Command | What it does |
+|---------|-------------|
+| `git init` | Initialize a new repo |
+| `git status` | Check current changes |
+| `git add .` | Stage all changes |
+| `git add <file>` | Stage a specific file |
+| `git commit -m ""` | Save a snapshot with a message |
+| `git log` | View commit history |
+| `git diff <id1> <id2>` | Compare two commits |
+| `git branch` | List branches |
+| `git branch <name>` | Create a new branch |
+| `git checkout <name>` | Switch to a branch |
+| `git merge <name>` | Merge a branch into current |
+| `git remote add origin <url>` | Connect to GitHub/GitLab |
+| `git push` | Upload commits online |
+| `git pull` | Download online changes |
+| `git clone <url>` | Download a full repo |
+
+---
+
+## Tips
+
+- Always write **meaningful commit messages** — future you will thank you!
+- Commit **often** — small snapshots are better than one giant commit
+- Always `git pull` before starting work to avoid conflicts
+- Use **branches** for any new feature or experiment — never work directly on master for important projects
+- Your commit history is your project's **diary** — make it readable!
+
+---
+
+*Tutorial completed on April 19, 2026 — Git Bash on Windows*
